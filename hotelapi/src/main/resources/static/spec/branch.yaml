@@ -1,0 +1,1343 @@
+openapi: 3.0.3
+info:
+  title: Hotel API (Branch)
+  description: |-
+    Спецификация REST API филиальных БД.
+
+    Все endpoint-ы используют path-параметр `{branch}` для маршрутизации запроса в конкретный филиал.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Номера (Branch)
+    description: CRUD по номерам в выбранном филиале.
+  - name: Гости (Branch)
+    description: CRUD по гостям выбранного филиала.
+  - name: Сотрудники (Branch)
+    description: CRUD по сотрудникам выбранного филиала.
+  - name: Бронирования (Branch)
+    description: CRUD по бронированиям (reservation) выбранного филиала.
+  - name: Персонал бронирования (Branch)
+    description: Назначение сотрудников на бронирования (сущность-связка reservation_staff).
+paths:
+  /api/v1/branches/{branch}/rooms:
+    get:
+      tags:
+        - Номера (Branch)
+      summary: Список номеров
+      description: Возвращает список номеров в выбранном филиале. Можно отфильтровать по типу и максимальной цене.
+      operationId: listRoomsBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: type
+          in: query
+          required: false
+          description: Фильтр по типу номера.
+          schema:
+            type: string
+          example: double
+        - name: maxPrice
+          in: query
+          required: false
+          description: Максимальная цена за ночь.
+          schema:
+            type: number
+            format: decimal
+          example: 7000.0
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Номер (Branch)'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    post:
+      tags:
+        - Номера (Branch)
+      summary: Создать номер
+      description: Создаёт новый номер в выбранном филиале.
+      operationId: createRoomBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Создание номера (Branch)'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Номер (Branch)'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+  /api/v1/branches/{branch}/rooms/{roomId}:
+    get:
+      tags:
+        - Номера (Branch)
+      summary: Получить номер
+      description: Возвращает номер по идентификатору.
+      operationId: getRoomBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: roomId
+          in: path
+          required: true
+          description: Идентификатор номера.
+          schema:
+            type: integer
+            format: int32
+          example: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Номер (Branch)'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    put:
+      tags:
+        - Номера (Branch)
+      summary: Обновить номер
+      description: Полное обновление номера по идентификатору.
+      operationId: updateRoomBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: roomId
+          in: path
+          required: true
+          description: Идентификатор номера.
+          schema:
+            type: integer
+            format: int32
+          example: 10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Обновление номера (Branch)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Номер (Branch)'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    delete:
+      tags:
+        - Номера (Branch)
+      summary: Удалить номер
+      description: Удаляет номер по идентификатору.
+      operationId: deleteRoomBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: roomId
+          in: path
+          required: true
+          description: Идентификатор номера.
+          schema:
+            type: integer
+            format: int32
+          example: 10
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+  /api/v1/branches/{branch}/guests:
+    get:
+      tags:
+        - Гости (Branch)
+      summary: Список гостей
+      description: Возвращает список гостей выбранного филиала.
+      operationId: listGuestsBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Гость (Branch)'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    post:
+      tags:
+        - Гости (Branch)
+      summary: Создать гостя
+      description: Создаёт нового гостя в выбранном филиале.
+      operationId: createGuestBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Создание гостя (Branch)'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Гость (Branch)'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+  /api/v1/branches/{branch}/guests/{guestId}:
+    get:
+      tags:
+        - Гости (Branch)
+      summary: Получить гостя
+      description: Возвращает гостя по идентификатору.
+      operationId: getGuestBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: guestId
+          in: path
+          required: true
+          description: Идентификатор гостя.
+          schema:
+            type: integer
+            format: int32
+          example: 42
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Гость (Branch)'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    put:
+      tags:
+        - Гости (Branch)
+      summary: Обновить гостя
+      description: Полное обновление гостя по идентификатору.
+      operationId: updateGuestBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: guestId
+          in: path
+          required: true
+          description: Идентификатор гостя.
+          schema:
+            type: integer
+            format: int32
+          example: 42
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Обновление гостя (Branch)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Гость (Branch)'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    delete:
+      tags:
+        - Гости (Branch)
+      summary: Удалить гостя
+      description: Удаляет гостя по идентификатору.
+      operationId: deleteGuestBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: guestId
+          in: path
+          required: true
+          description: Идентификатор гостя.
+          schema:
+            type: integer
+            format: int32
+          example: 42
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+  /api/v1/branches/{branch}/staff:
+    get:
+      tags:
+        - Сотрудники (Branch)
+      summary: Список сотрудников
+      description: Возвращает список сотрудников выбранного филиала.
+      operationId: listStaffBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Сотрудник (Branch)'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    post:
+      tags:
+        - Сотрудники (Branch)
+      summary: Создать сотрудника
+      description: Создаёт нового сотрудника в выбранном филиале.
+      operationId: createStaffBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Создание сотрудника (Branch)'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Сотрудник (Branch)'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+  /api/v1/branches/{branch}/staff/{staffId}:
+    get:
+      tags:
+        - Сотрудники (Branch)
+      summary: Получить сотрудника
+      description: Возвращает сотрудника по идентификатору.
+      operationId: getStaffBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: staffId
+          in: path
+          required: true
+          description: Идентификатор сотрудника.
+          schema:
+            type: integer
+            format: int32
+          example: 7
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Сотрудник (Branch)'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    put:
+      tags:
+        - Сотрудники (Branch)
+      summary: Обновить сотрудника
+      description: Полное обновление сотрудника по идентификатору.
+      operationId: updateStaffBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: staffId
+          in: path
+          required: true
+          description: Идентификатор сотрудника.
+          schema:
+            type: integer
+            format: int32
+          example: 7
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Обновление сотрудника (Branch)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Сотрудник (Branch)'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    delete:
+      tags:
+        - Сотрудники (Branch)
+      summary: Удалить сотрудника
+      description: Удаляет сотрудника по идентификатору.
+      operationId: deleteStaffBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: staffId
+          in: path
+          required: true
+          description: Идентификатор сотрудника.
+          schema:
+            type: integer
+            format: int32
+          example: 7
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+  /api/v1/branches/{branch}/reservations:
+    get:
+      tags:
+        - Бронирования (Branch)
+      summary: Список бронирований
+      description: Возвращает список бронирований выбранного филиала. Можно ограничить диапазон дат заезда.
+      operationId: listReservationsBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: guestId
+          in: query
+          required: false
+          description: Фильтр по идентификатору гостя.
+          schema:
+            type: integer
+            format: int32
+          example: 10
+        - name: roomId
+          in: query
+          required: false
+          description: Фильтр по идентификатору номера.
+          schema:
+            type: integer
+            format: int32
+          example: 15
+        - name: from
+          in: query
+          required: false
+          description: Дата заезда от (включительно).
+          schema:
+            type: string
+            format: date
+          example: '2026-02-01'
+        - name: to
+          in: query
+          required: false
+          description: Дата заезда до (включительно).
+          schema:
+            type: string
+            format: date
+          example: '2026-02-28'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Бронирование (Branch)'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    post:
+      tags:
+        - Бронирования (Branch)
+      summary: Создать бронирование
+      description: Создаёт новое бронирование в выбранном филиале.
+      operationId: createReservationBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Создание бронирования (Branch)'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Бронирование (Branch)'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+  /api/v1/branches/{branch}/reservations/{reservationId}:
+    get:
+      tags:
+        - Бронирования (Branch)
+      summary: Получить бронирование
+      description: Возвращает бронирование по идентификатору.
+      operationId: getReservationBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: reservationId
+          in: path
+          required: true
+          description: Идентификатор бронирования.
+          schema:
+            type: integer
+            format: int32
+          example: 1001
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Бронирование (Branch)'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    put:
+      tags:
+        - Бронирования (Branch)
+      summary: Обновить бронирование
+      description: Полное обновление бронирования по идентификатору.
+      operationId: updateReservationBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: reservationId
+          in: path
+          required: true
+          description: Идентификатор бронирования.
+          schema:
+            type: integer
+            format: int32
+          example: 1001
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Обновление бронирования (Branch)'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Бронирование (Branch)'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    delete:
+      tags:
+        - Бронирования (Branch)
+      summary: Удалить бронирование
+      description: Удаляет бронирование по идентификатору.
+      operationId: deleteReservationBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: reservationId
+          in: path
+          required: true
+          description: Идентификатор бронирования.
+          schema:
+            type: integer
+            format: int32
+          example: 1001
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+  /api/v1/branches/{branch}/reservations/{reservationId}/staff:
+    get:
+      tags:
+        - Персонал бронирования (Branch)
+      summary: Список сотрудников бронирования
+      description: Возвращает список назначенных сотрудников для указанного бронирования.
+      operationId: listReservationStaffBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: reservationId
+          in: path
+          required: true
+          description: Идентификатор бронирования.
+          schema:
+            type: integer
+            format: int32
+          example: 1001
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Связь бронирование-сотрудник (Branch)'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+  /api/v1/branches/{branch}/reservations/{reservationId}/staff/{staffId}:
+    post:
+      tags:
+        - Персонал бронирования (Branch)
+      summary: Назначить сотрудника
+      description: Назначает сотрудника на бронирование (создаёт связь reservation↔staff).
+      operationId: assignStaffToReservationBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: reservationId
+          in: path
+          required: true
+          description: Идентификатор бронирования.
+          schema:
+            type: integer
+            format: int32
+          example: 1001
+        - name: staffId
+          in: path
+          required: true
+          description: Идентификатор сотрудника.
+          schema:
+            type: integer
+            format: int32
+          example: 7
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+    delete:
+      tags:
+        - Персонал бронирования (Branch)
+      summary: Снять сотрудника
+      description: Удаляет связь reservation↔staff (снимает сотрудника с бронирования).
+      operationId: unassignStaffFromReservationBranch
+      parameters:
+        - name: branch
+          in: path
+          required: true
+          description: Код филиала. Используется для маршрутизации запроса в соответствующую филиальную БД (например,
+            branch1, branch2).
+          schema:
+            type: string
+          example: branch1
+        - name: reservationId
+          in: path
+          required: true
+          description: Идентификатор бронирования.
+          schema:
+            type: integer
+            format: int32
+          example: 1001
+        - name: staffId
+          in: path
+          required: true
+          description: Идентификатор сотрудника.
+          schema:
+            type: integer
+            format: int32
+          example: 7
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ошибка API'
+
+components:
+  schemas:
+    Ошибка API:
+      type: object
+      description: Единый формат ошибки для всех endpoint-ов.
+      required:
+        - timestamp
+        - status
+        - error
+        - message
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Время возникновения ошибки (ISO-8601).
+          example: 2026-01-25T20:53:32.123+07:00
+        status:
+          type: integer
+          format: int32
+          description: HTTP статус код.
+          example: 404
+        error:
+          type: string
+          description: Короткое название ошибки.
+          example: Не найдено
+        message:
+          type: string
+          description: Человеко-читаемое сообщение.
+          example: Номер с id = 10 не найден
+      example:
+        timestamp: 2026-01-25T20:53:32.123+07:00
+        status: 404
+        error: Не найдено
+        message: Номер с id = 10 не найден
+
+    Номер (Branch):
+      type: object
+      description: Номер в конкретном филиале.
+      required:
+        - roomId
+        - number
+      properties:
+        roomId:
+          type: integer
+          format: int32
+          description: Идентификатор номера.
+          example: 10
+        number:
+          type: string
+          description: Номер комнаты (как на двери/в системе).
+          example: '101'
+        type:
+          type: string
+          nullable: true
+          description: Тип номера (например, single/double/suite).
+          example: double
+        price:
+          type: number
+          format: decimal
+          nullable: true
+          description: Цена за ночь.
+          example: 6500.0
+      example:
+        roomId: 10
+        number: '101'
+        type: double
+        price: 6500.0
+
+    Создание номера (Branch):
+      type: object
+      description: Данные для создания номера.
+      required:
+        - number
+      properties:
+        number:
+          type: string
+          description: Номер комнаты.
+          example: '101'
+        type:
+          type: string
+          nullable: true
+          description: Тип номера.
+          example: double
+        price:
+          type: number
+          format: decimal
+          nullable: true
+          description: Цена за ночь.
+          example: 6500.0
+      example:
+        number: '101'
+        type: double
+        price: 6500.0
+
+    Обновление номера (Branch):
+      type: object
+      description: Данные для обновления номера.
+      required:
+        - number
+      properties:
+        number:
+          type: string
+          description: Номер комнаты.
+          example: '101'
+        type:
+          type: string
+          nullable: true
+          description: Тип номера.
+          example: double
+        price:
+          type: number
+          format: decimal
+          nullable: true
+          description: Цена за ночь.
+          example: 6500.0
+      example:
+        number: '201'
+        type: suite
+        price: 12000.0
+
+    Гость (Branch):
+      type: object
+      description: Гость конкретного филиала.
+      required:
+        - guestId
+        - fullName
+      properties:
+        guestId:
+          type: integer
+          format: int32
+          description: Идентификатор гостя.
+          example: 42
+        fullName:
+          type: string
+          description: Полное имя гостя.
+          example: Иван Петров
+        phone:
+          type: string
+          nullable: true
+          description: Телефон (опционально).
+          example: +7 999 123-45-67
+      example:
+        guestId: 42
+        fullName: Иван Петров
+        phone: +7 999 123-45-67
+
+    Создание гостя (Branch):
+      type: object
+      description: Данные для создания гостя.
+      required:
+        - fullName
+      properties:
+        fullName:
+          type: string
+          description: Полное имя гостя.
+          example: Иван Петров
+        phone:
+          type: string
+          nullable: true
+          description: Телефон (опционально).
+          example: +7 999 123-45-67
+      example:
+        fullName: Иван Петров
+        phone: +7 999 123-45-67
+
+    Обновление гостя (Branch):
+      type: object
+      description: Данные для обновления гостя.
+      required:
+        - fullName
+      properties:
+        fullName:
+          type: string
+          description: Полное имя гостя.
+          example: Иван Петров
+        phone:
+          type: string
+          nullable: true
+          description: Телефон (опционально).
+          example: +7 999 123-45-67
+      example:
+        fullName: Иван Петров
+        phone: +7 999 000-00-00
+
+    Сотрудник (Branch):
+      type: object
+      description: Сотрудник конкретного филиала.
+      required:
+        - staffId
+        - name
+        - role
+      properties:
+        staffId:
+          type: integer
+          format: int32
+          description: Идентификатор сотрудника.
+          example: 7
+        name:
+          type: string
+          description: ФИО или отображаемое имя.
+          example: Анна Иванова
+        role:
+          type: string
+          description: Роль (например, admin, receptionist, cleaner).
+          example: receptionist
+      example:
+        staffId: 7
+        name: Анна Иванова
+        role: receptionist
+
+    Создание сотрудника (Branch):
+      type: object
+      description: Данные для создания сотрудника.
+      required:
+        - name
+        - role
+      properties:
+        name:
+          type: string
+          description: ФИО или отображаемое имя.
+          example: Анна Иванова
+        role:
+          type: string
+          description: Роль.
+          example: receptionist
+      example:
+        name: Анна Иванова
+        role: receptionist
+
+    Обновление сотрудника (Branch):
+      type: object
+      description: Данные для обновления сотрудника.
+      required:
+        - name
+        - role
+      properties:
+        name:
+          type: string
+          description: ФИО или отображаемое имя.
+          example: Анна Иванова
+        role:
+          type: string
+          description: Роль.
+          example: receptionist
+      example:
+        name: Анна Иванова
+        role: manager
+
+    Бронирование (Branch):
+      type: object
+      description: Бронирование номера в конкретном филиале.
+      required:
+        - reservationId
+        - guestId
+        - roomId
+        - checkIn
+        - checkOut
+      properties:
+        reservationId:
+          type: integer
+          format: int32
+          description: Идентификатор бронирования.
+          example: 1001
+        guestId:
+          type: integer
+          format: int32
+          description: Идентификатор гостя.
+          example: 42
+        roomId:
+          type: integer
+          format: int32
+          description: Идентификатор номера.
+          example: 10
+        checkIn:
+          type: string
+          format: date
+          description: Дата заезда.
+          example: '2026-02-10'
+        checkOut:
+          type: string
+          format: date
+          description: Дата выезда.
+          example: '2026-02-14'
+      example:
+        reservationId: 1001
+        guestId: 42
+        roomId: 10
+        checkIn: '2026-02-10'
+        checkOut: '2026-02-14'
+
+    Создание бронирования (Branch):
+      type: object
+      description: Данные для создания бронирования.
+      required:
+        - guestId
+        - roomId
+        - checkIn
+        - checkOut
+      properties:
+        guestId:
+          type: integer
+          format: int32
+          description: Идентификатор гостя.
+          example: 42
+        roomId:
+          type: integer
+          format: int32
+          description: Идентификатор номера.
+          example: 10
+        checkIn:
+          type: string
+          format: date
+          description: Дата заезда.
+          example: '2026-02-10'
+        checkOut:
+          type: string
+          format: date
+          description: Дата выезда.
+          example: '2026-02-14'
+      example:
+        guestId: 42
+        roomId: 10
+        checkIn: '2026-02-10'
+        checkOut: '2026-02-14'
+
+    Обновление бронирования (Branch):
+      type: object
+      description: Данные для обновления бронирования.
+      required:
+        - guestId
+        - roomId
+        - checkIn
+        - checkOut
+      properties:
+        guestId:
+          type: integer
+          format: int32
+          description: Идентификатор гостя.
+          example: 42
+        roomId:
+          type: integer
+          format: int32
+          description: Идентификатор номера.
+          example: 10
+        checkIn:
+          type: string
+          format: date
+          description: Дата заезда.
+          example: '2026-02-10'
+        checkOut:
+          type: string
+          format: date
+          description: Дата выезда.
+          example: '2026-02-14'
+      example:
+        guestId: 42
+        roomId: 12
+        checkIn: '2026-02-12'
+        checkOut: '2026-02-16'
+
+    Связь бронирование-сотрудник (Branch):
+      type: object
+      description: Связь «бронирование ↔ сотрудник». Используется для назначения сотрудников на конкретное бронирование.
+      required:
+        - reservationId
+        - staffId
+      properties:
+        reservationId:
+          type: integer
+          format: int32
+          description: Идентификатор бронирования.
+          example: 1001
+        staffId:
+          type: integer
+          format: int32
+          description: Идентификатор сотрудника.
+          example: 7
+      example:
+        reservationId: 1001
+        staffId: 7

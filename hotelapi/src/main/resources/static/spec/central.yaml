@@ -1,0 +1,834 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+tags:
+  - name: Поставщики-Филиалы (Central)
+    description: Операции привязки поставщиков к филиалам в центральной базе.
+  - name: Сотрудники (Central)
+    description: Операции центрального узла для управления сотрудниками.
+  - name: Департаменты (Central)
+    description: Операции центрального узла для управления департаментами.
+  - name: Филиалы (Central)
+    description: Операции центрального узла для просмотра списка филиалов.
+  - name: Поставщики (Central)
+    description: Операции центрального узла для управления поставщиками.
+paths:
+  /api/v1/central/suppliers/{supplierId}:
+    get:
+      tags:
+        - Поставщики (Central)
+      summary: Получить поставщика по id
+      description: Возвращает поставщика по идентификатору.
+      operationId: getCentralSupplierById
+      parameters:
+        - name: supplierId
+          in: path
+          description: Идентификатор поставщика.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Поставщик (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    put:
+      tags:
+        - Поставщики (Central)
+      summary: Обновить поставщика
+      description: Обновляет название компании у существующего поставщика.
+      operationId: updateCentralSupplier
+      parameters:
+        - name: supplierId
+          in: path
+          description: Идентификатор поставщика.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Обновление поставщика (Central)"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Поставщик (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    delete:
+      tags:
+        - Поставщики (Central)
+      summary: Удалить поставщика
+      description: Удаляет поставщика по идентификатору.
+      operationId: deleteCentralSupplier
+      parameters:
+        - name: supplierId
+          in: path
+          description: Идентификатор поставщика.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+  /api/v1/central/staff/{staffId}:
+    get:
+      tags:
+        - Сотрудники (Central)
+      summary: Получить сотрудника по id
+      description: Возвращает сотрудника центрального узла по идентификатору.
+      operationId: getCentralStaffById
+      parameters:
+        - name: staffId
+          in: path
+          description: Идентификатор сотрудника.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Сотрудник (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    put:
+      tags:
+        - Сотрудники (Central)
+      summary: Обновить сотрудника
+      description: Обновляет данные существующего сотрудника центрального узла.
+      operationId: updateCentralStaff
+      parameters:
+        - name: staffId
+          in: path
+          description: Идентификатор сотрудника.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Обновление сотрудника (Central)"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Сотрудник (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    delete:
+      tags:
+        - Сотрудники (Central)
+      summary: Удалить сотрудника
+      description: Удаляет сотрудника центрального узла по идентификатору.
+      operationId: deleteCentralStaff
+      parameters:
+        - name: staffId
+          in: path
+          description: Идентификатор сотрудника.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+  /api/v1/central/departments/{departmentId}:
+    get:
+      tags:
+        - Департаменты (Central)
+      summary: Получить департамент по id
+      description: Возвращает департамент по идентификатору.
+      operationId: getCentralDepartmentById
+      parameters:
+        - name: departmentId
+          in: path
+          description: Идентификатор департамента.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Департамент (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    put:
+      tags:
+        - Департаменты (Central)
+      summary: Обновить департамент
+      description: Обновляет название существующего департамента.
+      operationId: updateCentralDepartment
+      parameters:
+        - name: departmentId
+          in: path
+          description: Идентификатор департамента.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Обновление департамента (Central)"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Департамент (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    delete:
+      tags:
+        - Департаменты (Central)
+      summary: Удалить департамент
+      description: Удаляет департамент по идентификатору.
+      operationId: deleteCentralDepartment
+      parameters:
+        - name: departmentId
+          in: path
+          description: Идентификатор департамента.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+  /api/v1/central/suppliers:
+    get:
+      tags:
+        - Поставщики (Central)
+      summary: Список поставщиков
+      description: Возвращает список поставщиков. Можно отфильтровать по названию компании.
+      operationId: listCentralSuppliers
+      parameters:
+        - name: companyName
+          in: query
+          description: Фильтр по названию компании (поиск подстроки, без учёта регистра).
+          required: false
+          schema:
+            type: string
+          example: Food
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Поставщик (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    post:
+      tags:
+        - Поставщики (Central)
+      summary: Создать поставщика
+      description: Создаёт нового поставщика в центральной базе и возвращает созданную
+        запись.
+      operationId: createCentralSupplier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Создание поставщика (Central)"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Поставщик (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+  /api/v1/central/suppliers/{supplierId}/branches/{branchId}:
+    post:
+      tags:
+        - Поставщики-Филиалы (Central)
+      summary: Привязать поставщика к филиалу
+      description: Создаёт связь между поставщиком и филиалом в центральной базе.
+      operationId: linkCentralSupplierToBranch
+      parameters:
+        - name: supplierId
+          in: path
+          description: Идентификатор поставщика.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+        - name: branchId
+          in: path
+          description: Идентификатор филиала.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 2
+      responses:
+        "201":
+          description: Created
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Связь поставщик–филиал (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    delete:
+      tags:
+        - Поставщики-Филиалы (Central)
+      summary: Отвязать поставщика от филиала
+      description: Удаляет связь между поставщиком и филиалом в центральной базе.
+      operationId: unlinkCentralSupplierFromBranch
+      parameters:
+        - name: supplierId
+          in: path
+          description: Идентификатор поставщика.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+        - name: branchId
+          in: path
+          description: Идентификатор филиала.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 2
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+  /api/v1/central/staff:
+    get:
+      tags:
+        - Сотрудники (Central)
+      summary: Список сотрудников
+      description: Возвращает список сотрудников центрального узла. Можно
+        отфильтровать по департаменту.
+      operationId: listCentralStaff
+      parameters:
+        - name: departmentId
+          in: query
+          description: Фильтр по департаменту (departmentId). Если не указан — вернутся
+            все сотрудники.
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Сотрудник (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    post:
+      tags:
+        - Сотрудники (Central)
+      summary: Создать сотрудника
+      description: Создаёт нового сотрудника центрального узла и возвращает созданную
+        запись.
+      operationId: createCentralStaff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Создание сотрудника (Central)"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Сотрудник (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+  /api/v1/central/departments:
+    get:
+      tags:
+        - Департаменты (Central)
+      summary: Список департаментов
+      description: Возвращает список департаментов. Можно отфильтровать по названию
+        (поиск подстроки).
+      operationId: listCentralDepartments
+      parameters:
+        - name: name
+          in: query
+          description: Фильтр по названию департамента (поиск подстроки, без учёта
+            регистра).
+          required: false
+          schema:
+            type: string
+          example: Fin
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Департамент (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+    post:
+      tags:
+        - Департаменты (Central)
+      summary: Создать департамент
+      description: Создаёт новый департамент в центральной базе и возвращает созданную
+        запись.
+      operationId: createCentralDepartment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Создание департамента (Central)"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Департамент (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+  /api/v1/central/suppliers/{supplierId}/branches:
+    get:
+      tags:
+        - Поставщики-Филиалы (Central)
+      summary: Список филиалов поставщика
+      description: Возвращает список связей (поставщик–филиал) для заданного поставщика.
+      operationId: listCentralSupplierBranches
+      parameters:
+        - name: supplierId
+          in: path
+          description: Идентификатор поставщика.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Связь поставщик–филиал (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+  /api/v1/central/branches:
+    get:
+      tags:
+        - Филиалы (Central)
+      summary: Список филиалов
+      description: Возвращает список филиалов из центральной базы.
+      operationId: listCentralBranches
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Филиал (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+  /api/v1/central/branches/{branchId}:
+    get:
+      tags:
+        - Филиалы (Central)
+      summary: Получить филиал по id
+      description: Возвращает филиал по идентификатору из центральной базы.
+      operationId: getCentralBranchById
+      parameters:
+        - name: branchId
+          in: path
+          description: Идентификатор филиала.
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Филиал (Central)"
+        "404":
+          description: Not Found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Ошибка API"
+components:
+  schemas:
+    Ошибка API:
+      type: object
+      description: Единый формат ошибки, возвращаемый API.
+      required:
+        - timestamp
+        - status
+        - error
+        - message
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Время возникновения ошибки (ISO-8601).
+          example: 2026-01-25T20:53:32.123+07:00
+        status:
+          type: integer
+          format: int32
+          description: HTTP статус код.
+          example: 404
+        error:
+          type: string
+          description: Короткое название ошибки.
+          example: Не найдено
+        message:
+          type: string
+          description: Человеко-читаемое сообщение.
+          example: Поставщик с id = 42 не найден
+      example:
+        timestamp: 2026-01-25T20:53:32.123+07:00
+        status: 404
+        error: Не найдено
+        message: Поставщик с id = 42 не найден
+    Обновление поставщика (Central):
+      type: object
+      description: Данные для обновления существующего поставщика в центральной базе.
+      properties:
+        companyName:
+          type: string
+          description: Новое название компании-поставщика.
+          example: Linen & Towels LLC (обновлено)
+      required:
+        - companyName
+      example:
+        companyName: Linen & Towels LLC (обновлено)
+    Поставщик (Central):
+      type: object
+      description: Поставщик в центральной базе данных.
+      properties:
+        supplierId:
+          type: integer
+          format: int32
+          description: Идентификатор поставщика.
+          example: 1
+        companyName:
+          type: string
+          description: Название компании-поставщика.
+          example: Food Supply Inc
+      required:
+        - companyName
+        - supplierId
+      example:
+        supplierId: 1
+        companyName: Food Supply Inc
+    Обновление сотрудника (Central):
+      type: object
+      description: Данные для обновления сотрудника в центральной базе.
+      properties:
+        name:
+          type: string
+          description: Новое имя сотрудника.
+          example: Charlie Central (обновлено)
+        departmentId:
+          type: integer
+          format: int32
+          description: Новый идентификатор департамента (если сотрудника переводят).
+          example: 1
+      required:
+        - departmentId
+        - name
+      example:
+        name: Charlie Central (обновлено)
+        departmentId: 1
+    Сотрудник (Central):
+      type: object
+      description: Сотрудник центрального узла (таблица staff_central).
+      properties:
+        staffId:
+          type: integer
+          format: int32
+          description: Идентификатор сотрудника.
+          example: 1
+        name:
+          type: string
+          description: Имя сотрудника.
+          example: Alice Central
+        departmentId:
+          type: integer
+          format: int32
+          description: Идентификатор департамента, к которому относится сотрудник.
+          example: 1
+      required:
+        - departmentId
+        - name
+        - staffId
+      example:
+        staffId: 1
+        name: Alice Central
+        departmentId: 1
+    Обновление департамента (Central):
+      type: object
+      description: Данные для обновления существующего департамента в центральной базе.
+      properties:
+        name:
+          type: string
+          description: Новое название департамента. Должно быть уникальным.
+          example: Finance (обновлено)
+      required:
+        - name
+      example:
+        name: Finance (обновлено)
+    Департамент (Central):
+      type: object
+      description: Департамент в центральной базе данных.
+      properties:
+        departmentId:
+          type: integer
+          format: int32
+          description: Идентификатор департамента.
+          example: 1
+        name:
+          type: string
+          description: Название департамента.
+          example: Purchasing
+      required:
+        - departmentId
+        - name
+      example:
+        departmentId: 1
+        name: Purchasing
+    Создание поставщика (Central):
+      type: object
+      description: Данные для создания нового поставщика в центральной базе.
+      properties:
+        companyName:
+          type: string
+          description: Название компании-поставщика.
+          example: Linen & Towels LLC
+      required:
+        - companyName
+      example:
+        companyName: Linen & Towels LLC
+    Связь поставщик–филиал (Central):
+      type: object
+      description: Связь между поставщиком и филиалом в центральной базе (таблица
+        supplier_branch).
+      properties:
+        supplierId:
+          type: integer
+          format: int32
+          description: Идентификатор поставщика.
+          example: 1
+        branchId:
+          type: integer
+          format: int32
+          description: Идентификатор филиала.
+          example: 2
+      required:
+        - branchId
+        - supplierId
+      example:
+        supplierId: 1
+        branchId: 2
+    Создание сотрудника (Central):
+      type: object
+      description: Данные для создания сотрудника в центральной базе.
+      properties:
+        name:
+          type: string
+          description: Имя сотрудника.
+          example: Charlie Central
+        departmentId:
+          type: integer
+          format: int32
+          description: Идентификатор департамента, в котором работает сотрудник.
+          example: 2
+      required:
+        - departmentId
+        - name
+      example:
+        name: Charlie Central
+        departmentId: 2
+    Создание департамента (Central):
+      type: object
+      description: Данные для создания нового департамента в центральной базе.
+      properties:
+        name:
+          type: string
+          description: Название департамента. Должно быть уникальным.
+          example: Finance
+      required:
+        - name
+      example:
+        name: Finance
+    Филиал (Central):
+      type: object
+      description: Филиал гостиничной сети, хранящийся в центральной базе данных.
+      properties:
+        branchId:
+          type: integer
+          format: int32
+          description: Идентификатор филиала.
+          example: 1
+        name:
+          type: string
+          description: Название филиала.
+          example: "Branch #1"
+        address:
+          type: string
+          description: Адрес филиала.
+          example: г. Новосибирск, ул. Ленина, 10
+      required:
+        - address
+        - branchId
+        - name
+      example:
+        branchId: 1
+        name: branch1
+        address: г. Новосибирск, ул. Ленина, 10

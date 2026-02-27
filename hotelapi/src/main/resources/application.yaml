@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/central_db}
+    username: ${SPRING_DATASOURCE_USERNAME:central_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:central_pass}
+  jooq:
+    sql-dialect: POSTGRES
+  application:
+    name: hotelapi
+  flyway:
+    locations: classpath:db/migration/central
+
+BRANCH1_DB_URL: ${BRANCH1_DB_URL:jdbc:postgresql://localhost:5433/branch1_db}
+BRANCH1_DB_USER: ${BRANCH1_DB_USER:branch_user}
+BRANCH1_DB_PASS: ${BRANCH1_DB_PASS:branch_pass}
+
+BRANCH2_DB_URL: ${BRANCH2_DB_URL:jdbc:postgresql://localhost:5434/branch2_db}
+BRANCH2_DB_USER: ${BRANCH2_DB_USER:branch_user}
+BRANCH2_DB_PASS: ${BRANCH2_DB_PASS:branch_pass}
+
+springdoc:
+  api-docs:
+    enabled: false
+
+scalar:
+  enabled: true
+  sources:
+    - url: /spec/central.yaml
+      slug: central
+      title: Central
+    - url: /spec/branch.yaml
+      slug: branch
+      title: Branch
