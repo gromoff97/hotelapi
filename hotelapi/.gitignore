@@ -1,0 +1,19 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+.serena/
+
+# Gradle
+.gradle/
+build/
+
+# Logs
+*.log
+demo_scalar.log
+
+# OS
+.DS_Store
+Thumbs.db

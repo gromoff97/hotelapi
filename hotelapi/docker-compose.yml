@@ -1,0 +1,87 @@
+services:
+  postgres_central:
+    image: postgres:16
+    container_name: postgres_central
+    environment:
+      POSTGRES_DB: central_db
+      POSTGRES_USER: central_user
+      POSTGRES_PASSWORD: central_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_central_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U central_user -d central_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  postgres_branch1:
+    image: postgres:16
+    container_name: postgres_branch1
+    environment:
+      POSTGRES_DB: branch1_db
+      POSTGRES_USER: branch_user
+      POSTGRES_PASSWORD: branch_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_branch1_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U branch_user -d branch1_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  postgres_branch2:
+    image: postgres:16
+    container_name: postgres_branch2
+    environment:
+      POSTGRES_DB: branch2_db
+      POSTGRES_USER: branch_user
+      POSTGRES_PASSWORD: branch_pass
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg_branch2_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U branch_user -d branch2_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  hotel-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hotel_api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_central:5432/central_db
+      SPRING_DATASOURCE_USERNAME: central_user
+      SPRING_DATASOURCE_PASSWORD: central_pass
+
+      BRANCH1_DB_URL: jdbc:postgresql://postgres_branch1:5432/branch1_db
+      BRANCH1_DB_USER: branch_user
+      BRANCH1_DB_PASS: branch_pass
+
+      BRANCH2_DB_URL: jdbc:postgresql://postgres_branch2:5432/branch2_db
+      BRANCH2_DB_USER: branch_user
+      BRANCH2_DB_PASS: branch_pass
+
+      JAVA_TOOL_OPTIONS: >-
+        -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends_on:
+      postgres_central:
+        condition: service_healthy
+      postgres_branch1:
+        condition: service_healthy
+      postgres_branch2:
+        condition: service_healthy
+
+volumes:
+  pg_central_data:
+  pg_branch1_data:
+  pg_branch2_data:

@@ -1,0 +1,72 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Kotlin ###
+.kotlin
+
+### FSM runtime ###
+hotelapi/.env
+hotelapi/docs/process/_last_message.json
+hotelapi/docs/process/_last_error.txt
+hotelapi/docs/process/_progress.json
+hotelapi/docs/process/_progress_message.json
+hotelapi/docs/process/_tg_offset.txt
+hotelapi/docs/process/_inbox_offset.txt
+hotelapi/docs/process/history/
+hotelapi/docs/process/customer_inbox.jsonl
+hotelapi/docs/process/_fsm.lock
+hotelapi/docs/process/_sent_messages.jsonl
+hotelapi/docs/process/_webhook.pid
+hotelapi/docs/process/webhook.log
+hotelapi/docs/process/cloudflared.log
+hotelapi/docs/process/_listener.pid
+hotelapi/docs/process/_listener.lock
+hotelapi/docs/process/telegram_listener.log
+hotelapi/docs/process/_last_customer_message.txt
+hotelapi/docs/process/_daemon.pid
+hotelapi/docs/process/daemon.log
+
+### Local env ###
+hotelapi/tools/orchestrator/.venv/
+hotelapi/.serena/
+hotelapi/.docker/
+.tmp/
+
+# Python
+__pycache__/
+*.pyc
