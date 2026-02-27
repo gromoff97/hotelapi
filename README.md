@@ -52,11 +52,21 @@ E2E‑тест:
 
 ## Структура проекта (ключевые файлы)
 
+**Сборка и окружение**
 - `Dockerfile` — сборка образа
 - `docker-compose.yml` — запуск БД и приложения
+- `build.gradle.kts` — сборка и зависимости
+
+**Код приложения**
+- `src/main/kotlin/tisbi/gromov/hotelapi/central/**` — контроллеры, сервисы, репозитории центрального контура
+- `src/main/kotlin/tisbi/gromov/hotelapi/branch/**` — контроллеры, сервисы, репозитории филиалов
+- `src/main/kotlin/tisbi/gromov/hotelapi/utils/**` — общие утилиты и обработка ошибок
+
+**Данные и документация**
 - `src/main/resources/db/migration/**` — миграции БД
 - `src/main/resources/static/spec/*.yaml` — OpenAPI спецификации
+
+**Демо**
 - `demo_report.sh` — демонстрационный сценарий
 
 ---
-
